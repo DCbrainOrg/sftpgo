@@ -34,10 +34,10 @@ RUN if [ "${INSTALL_OPTIONAL_PACKAGES}" = "true" ]; then apt-get update && apt-g
 
 RUN mkdir -p /etc/sftpgo /var/lib/sftpgo /usr/share/sftpgo /srv/sftpgo/data /srv/sftpgo/backups
 
-RUN groupadd --system -g 1000 sftpgo && \
+RUN groupadd --system -g 10000 sftpgo && \
     useradd --system --gid sftpgo --no-create-home \
     --home-dir /var/lib/sftpgo --shell /usr/sbin/nologin \
-    --comment "SFTPGo user" --uid 1000 sftpgo
+    --comment "SFTPGo user" --uid 10000 sftpgo
 
 COPY --from=builder /workspace/sftpgo.json /etc/sftpgo/sftpgo.json
 COPY --from=builder /workspace/templates /usr/share/sftpgo/templates
@@ -60,6 +60,6 @@ RUN sed -i "s|\"users_base_dir\": \"\",|\"users_base_dir\": \"/srv/sftpgo/data\"
 RUN chown -R sftpgo:sftpgo /etc/sftpgo /srv/sftpgo && chown sftpgo:sftpgo /var/lib/sftpgo && chmod 700 /srv/sftpgo/backups
 
 WORKDIR /var/lib/sftpgo
-USER 1000:1000
+USER 10000:10000
 
 CMD ["sftpgo", "serve"]
